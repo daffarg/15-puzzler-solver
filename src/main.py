@@ -1,5 +1,4 @@
 from queue import PriorityQueue
-from turtle import left
 
 fileName = input("Masukkan nama file: ")
 f = open(fileName, 'r')
@@ -92,7 +91,21 @@ def rightMatriks(matriks):
         rightMatriks[row][col+1] = 16
     return rightMatriks
 
-queue = PriorityQueue()
+def computeTaksiran(matriks):
+    count = 0
+    counter = 1
+    for i in range(4):
+        for j in range(4):
+            if (matriks[i][j] != counter):
+                count += 1
+            counter += 1
+    return count
+
+# queue = PriorityQueue()
+# queue.put()
+# while queue
+
+print(computeTaksiran(matriks))
 
 
         
