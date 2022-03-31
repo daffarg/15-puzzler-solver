@@ -1,9 +1,10 @@
+from queue import PriorityQueue
+from turtle import left
+
 fileName = input("Masukkan nama file: ")
 f = open(fileName, 'r')
 matriks = []
 matriks = [[int(elmt) for elmt in line.split()] for line in f]
-
-print(matriks)
 
 def searchEmptyTile(matriks): 
     '''
@@ -52,4 +53,46 @@ def computeKurang(matriks):
                     sigma += 1
             col = 0
     return sigma + computeX(matriks)
+
+def isReachable(matriks):
+    if (computeKurang(matriks) % 2 == 0):
+        return True
+    else:
+        return False
+
+def upMatriks(matriks):
+    upMatriks = matriks.copy()
+    row, col = searchEmptyTile(matriks)
+    if (row - 1 >= 0):
+        upMatriks[row][col] = upMatriks[row-1][col]
+        upMatriks[row-1][col] = 16
+    return upMatriks
+
+def downMatriks(matriks):
+    downMatriks = matriks.copy()
+    row, col = searchEmptyTile(matriks)
+    if (row + 1 < 4):
+        downMatriks[row][col] = downMatriks[row+1][col]
+        downMatriks[row+1][col] = 16
+    return downMatriks
+
+def leftMatriks(matriks):
+    leftMatriks = matriks.copy()
+    row, col = searchEmptyTile(matriks)
+    if (col - 1 >= 0):
+        leftMatriks[row][col] = leftMatriks[row][col-1]
+        leftMatriks[row][col-1] = 16
+    return leftMatriks
+
+def rightMatriks(matriks):
+    rightMatriks = matriks.copy()
+    row, col = searchEmptyTile(matriks)
+    if (col + 1 < 4):
+        rightMatriks[row][col] = rightMatriks[row][col+1]
+        rightMatriks[row][col+1] = 16
+    return rightMatriks
+
+queue = PriorityQueue()
+
+
         
