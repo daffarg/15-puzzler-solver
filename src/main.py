@@ -1,4 +1,5 @@
 from queue import PriorityQueue
+import copy
 
 fileName = input("Masukkan nama file: ")
 f = open(fileName, 'r')
@@ -13,7 +14,7 @@ def searchEmptyTile(matriks):
     '''
     for row in range(4):
         for col in range(4):
-            if (matriks[row][col] == '16'):
+            if (matriks[row][col] == 16):
                 return row, col
 
 def computeX(matriks):
@@ -60,7 +61,7 @@ def isReachable(matriks):
         return False
 
 def upMatriks(matriks):
-    upMatriks = matriks.copy()
+    upMatriks = copy.deepcopy(matriks)
     row, col = searchEmptyTile(matriks)
     if (row - 1 >= 0):
         upMatriks[row][col] = upMatriks[row-1][col]
@@ -68,7 +69,7 @@ def upMatriks(matriks):
     return upMatriks
 
 def downMatriks(matriks):
-    downMatriks = matriks.copy()
+    downMatriks = copy.deepcopy(matriks)
     row, col = searchEmptyTile(matriks)
     if (row + 1 < 4):
         downMatriks[row][col] = downMatriks[row+1][col]
@@ -76,7 +77,7 @@ def downMatriks(matriks):
     return downMatriks
 
 def leftMatriks(matriks):
-    leftMatriks = matriks.copy()
+    leftMatriks = copy.deepcopy(matriks)
     row, col = searchEmptyTile(matriks)
     if (col - 1 >= 0):
         leftMatriks[row][col] = leftMatriks[row][col-1]
@@ -84,7 +85,7 @@ def leftMatriks(matriks):
     return leftMatriks
 
 def rightMatriks(matriks):
-    rightMatriks = matriks.copy()
+    rightMatriks = copy.deepcopy(matriks)
     row, col = searchEmptyTile(matriks)
     if (col + 1 < 4):
         rightMatriks[row][col] = rightMatriks[row][col+1]
@@ -101,11 +102,51 @@ def computeTaksiran(matriks):
             counter += 1
     return count
 
-# queue = PriorityQueue()
+#print(computeTaksiran([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]))
+
+def printPuzzle(matriks):
+    for i in range(4):
+        for j in range(4):   
+            if (matriks[i][j] == 16):
+                print('  ', end = '')
+            else:
+                print(matriks[i][j], ' ', end = '')
+        print('\n')
+
+i = 1 # variabel kedalaman
+queue = PriorityQueue() # instantiasi priority queue
+levelMap = {} # dictionary kedalaman node
+queue.put((0, matriks))
+nodeBangkit = [matriks] # inisialisasi array penampung simpul yg sudah dibangkitkan
+found = False
+while (not(queue.empty()) and not(found)):
+    prio, prioMat = queue.get()
+
+    # tambahkan kemungkinan semua pergerakan ke dalam array expand
+    expand = []
+    expand.append(upMatriks(prioMat))
+    expand.append(downMatriks(prioMat))
+    expand.append(leftMatriks(prioMat))
+    expand.append(rightMatriks(prioMat))
+    
+    for mat in expand:
+        printPuzzle(mat)
+        print('\n')
+        if (mat not in nodeBangkit and mat != matriks):
+            nodeBangkit.append(mat)
+            levelMap[tuple(map(tuple,mat))] = i
+            taksiran = computeTaksiran(mat)
+            cost = taksiran + levelMap[tuple(map(tuple,mat))]
+            if (taksiran == 0):
+                found = True
+                break
+            queue.put((cost,mat))
+print("selesai")   
+    
 # queue.put()
 # while queue
 
-print(computeTaksiran(matriks))
+#print(computeTaksiran(matriks))
 
 
         
