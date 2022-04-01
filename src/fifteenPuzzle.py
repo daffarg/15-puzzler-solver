@@ -29,8 +29,10 @@ def computeKurang(matriks):
         Menerima masukan matriks of integer yang elemennya unik 1-16
         Mengembalikan perhitungan sigma KURANG(i) dalam perhitungan reachable goal
     '''
+    arrayKurang = []
     sigma = 0
     for i in range(1, 17):
+        sigmaOneTile = 0
         row = 0
         col = 0
         found = False
@@ -47,8 +49,10 @@ def computeKurang(matriks):
             for k in range(col, 4):
                 if (matriks[j][k] < i):
                     sigma += 1
+                    sigmaOneTile += 1
             col = 0
-    return sigma
+        arrayKurang.append(sigmaOneTile)
+    return sigma, arrayKurang
 
 def computeKurangPlusX(kurang, matriks):
     return kurang + computeX(matriks)
@@ -158,10 +162,13 @@ def startSolve(matriks):
     print("\nPosisi awal: \n")
     printPuzzle(matriks)
 
-    kurang = computeKurang(matriks)
-    print("Nilai fungsi KURANG(i) = ", kurang)
-    kurangPlusX = computeKurangPlusX(kurang, matriks)
-    print("Nilai KURANG(i) + X = ", kurangPlusX)
+    print("================================\n")
+
+    totalKurang, arrayKurang = computeKurang(matriks)
+    for i in range(len(arrayKurang)):
+        print("Nilai KURANG(i) untuk tile ke-" + str(i+1), " = ", arrayKurang[i])
+    kurangPlusX = computeKurangPlusX(totalKurang, matriks)
+    print("Nilai sigma KURANG(i) + X = ", kurangPlusX)
 
     print("\n================================")
 
