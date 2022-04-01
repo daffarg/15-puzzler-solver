@@ -113,34 +113,45 @@ def printPuzzle(matriks):
                 print(matriks[i][j], ' ', end = '')
         print('\n')
 
-i = 1 # variabel kedalaman
 queue = PriorityQueue() # instantiasi priority queue
-levelMap = {} # dictionary kedalaman node
-queue.put((0, matriks))
+#levelMap = {} # dictionary kedalaman node
+
+queue.put((0, matriks, 0, matriks)) # tupel: (cost, matriks, level, parentNode)
 nodeBangkit = [matriks] # inisialisasi array penampung simpul yg sudah dibangkitkan
 found = False
 while (not(queue.empty()) and not(found)):
-    prio, prioMat = queue.get()
+    current = queue.get() # dequeue (node yg memiliki cost minimum)
+    node = current[1]
+    levelNode = current[2]
+
+    if (computeTaksiran(node) == 0): # ketemu
+        printPuzzle(node)
+        print(len(nodeBangkit))
+        found = True
+        break
 
     # tambahkan kemungkinan semua pergerakan ke dalam array expand
     expand = []
-    expand.append(upMatriks(prioMat))
-    expand.append(downMatriks(prioMat))
-    expand.append(leftMatriks(prioMat))
-    expand.append(rightMatriks(prioMat))
+    expand.append(upMatriks(node))
+    expand.append(downMatriks(node))
+    expand.append(leftMatriks(node))
+    expand.append(rightMatriks(node))
     
     for mat in expand:
-        printPuzzle(mat)
         print('\n')
         if (mat not in nodeBangkit and mat != matriks):
             nodeBangkit.append(mat)
-            levelMap[tuple(map(tuple,mat))] = i
             taksiran = computeTaksiran(mat)
-            cost = taksiran + levelMap[tuple(map(tuple,mat))]
-            if (taksiran == 0):
-                found = True
-                break
-            queue.put((cost,mat))
+            cost = taksiran + levelNode + 1
+            queue.put((cost, mat, levelNode + 1, node))
+
+path = []
+while True:
+    path.append(current[3])
+    if (current[3] == current[1]):
+        break
+    current = current[3]
+
 print("selesai")   
     
 # queue.put()
