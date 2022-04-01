@@ -1,4 +1,5 @@
 from queue import PriorityQueue
+import time
 import copy
 
 fileName = input("Masukkan nama file: ")
@@ -31,7 +32,7 @@ def computeX(matriks):
 def computeKurang(matriks):
     '''
         Menerima masukan matriks of integer yang elemennya unik 1-16
-        Mengembalikan perhitungan sigma KURANG(i) + X dalam perhitungan reachable goal
+        Mengembalikan perhitungan sigma KURANG(i) dalam perhitungan reachable goal
     '''
     sigma = 0
     for i in range(1, 17):
@@ -52,10 +53,13 @@ def computeKurang(matriks):
                 if (matriks[j][k] < i):
                     sigma += 1
             col = 0
-    return sigma + computeX(matriks)
+    return sigma
 
-def isReachable(matriks):
-    if (computeKurang(matriks) % 2 == 0):
+def computeKurangPlusX(kurang, matriks):
+    return kurang + computeX(matriks)
+
+def isReachable(result):
+    if (result % 2 == 0):
         return True
     else:
         return False
@@ -102,8 +106,6 @@ def computeTaksiran(matriks):
             counter += 1
     return count
 
-#print(computeTaksiran([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]))
-
 def printPuzzle(matriks):
     for i in range(4):
         for j in range(4):   
@@ -113,51 +115,66 @@ def printPuzzle(matriks):
                 print(matriks[i][j], ' ', end = '')
         print('\n')
 
-queue = PriorityQueue() # instantiasi priority queue
-#levelMap = {} # dictionary kedalaman node
+def solvePuzzle(matriks):
+    queue = PriorityQueue() # instantiasi priority queue
+    queue.put((0, matriks, 0, None)) # tupel: (cost, matriks, level, parentNode)
+    nodeBangkit = [] # inisialisasi array penampung simpul yg sudah dibangkitkan
 
-queue.put((0, matriks, 0, matriks)) # tupel: (cost, matriks, level, parentNode)
-nodeBangkit = [matriks] # inisialisasi array penampung simpul yg sudah dibangkitkan
-found = False
-while (not(queue.empty()) and not(found)):
-    current = queue.get() # dequeue (node yg memiliki cost minimum)
-    node = current[1]
-    levelNode = current[2]
+    while (not(queue.empty())):
+        currentNode = queue.get() # dequeue (node yg memiliki cost minimum)
+        currentMatriks = currentNode[1]
+        levelNode = currentNode[2]
 
-    if (computeTaksiran(node) == 0): # ketemu
-        printPuzzle(node)
-        print(len(nodeBangkit))
-        found = True
-        break
+        if (computeTaksiran(currentMatriks) == 0): # ketemu
+            break
 
-    # tambahkan kemungkinan semua pergerakan ke dalam array expand
-    expand = []
-    expand.append(upMatriks(node))
-    expand.append(downMatriks(node))
-    expand.append(leftMatriks(node))
-    expand.append(rightMatriks(node))
-    
-    for mat in expand:
-        print('\n')
-        if (mat not in nodeBangkit and mat != matriks):
-            nodeBangkit.append(mat)
-            taksiran = computeTaksiran(mat)
-            cost = taksiran + levelNode + 1
-            queue.put((cost, mat, levelNode + 1, node))
-
-path = []
-while True:
-    path.append(current[3])
-    if (current[3] == current[1]):
-        break
-    current = current[3]
-
-print("selesai")   
-    
-# queue.put()
-# while queue
-
-#print(computeTaksiran(matriks))
-
-
+        # tambahkan kemungkinan semua pergerakan ke dalam array expand
+        expand = []
+        expand.append(upMatriks(currentMatriks))
+        expand.append(downMatriks(currentMatriks))
+        expand.append(leftMatriks(currentMatriks))
+        expand.append(rightMatriks(currentMatriks))
         
+        for mat in expand:
+            print('\n')
+            if (mat not in nodeBangkit and mat != matriks):
+                nodeBangkit.append(mat)
+                taksiran = computeTaksiran(mat)
+                cost = taksiran + levelNode + 1
+                queue.put((cost, mat, levelNode + 1, currentNode))
+    return currentNode, len(nodeBangkit)    
+
+def printSolution(finalNode):
+    path = []
+    while True:
+        path.insert(0, finalNode)
+        if (finalNode[3] == None):
+            break
+        finalNode = finalNode[3]
+
+    for i in range (len(path)):
+        print("Langkah ke " + str(i + 1))
+        printPuzzle(path[i][1])
+        print("\n--------------------------------")
+
+def startSolve(matriks):
+    print("Posisi awal: \n")
+    printPuzzle(matriks)
+    print("\n--------------------------------")
+
+    kurang = computeKurang(matriks)
+    print("Nilai fungsi KURANG(i) = ", kurang)
+    kurangPlusX = computeKurangPlusX(kurang, matriks)
+    print("Nilai KURANG(i) + X = ", kurangPlusX)
+
+    if (isReachable(kurangPlusX)):
+        start = time.time()
+        finalNode, nodeBangkit = solvePuzzle(matriks)
+        end = time.time()
+        printSolution(finalNode)
+        print("Waktu eksekusi = ", end - start)
+        print("Jumlah simpul yang dibangkitkan = ", nodeBangkit)
+    else:
+        print("Berdasarkan hasil fungsi KURANG(i) + x, persoalan tidak dapat diselesaikan")
+
+startSolve(matriks)
