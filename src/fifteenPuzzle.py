@@ -105,9 +105,12 @@ def printPuzzle(matriks):
     for i in range(4):
         for j in range(4):   
             if (matriks[i][j] == 16):
-                print('  ', end = '')
+                print('    ', end = '')
             else:
-                print(matriks[i][j], ' ', end = '')
+                if (matriks[i][j] < 10):
+                    print(matriks[i][j], '  ', end = '')
+                else:
+                    print(matriks[i][j], ' ', end = '')
         print('\n')
 
 def solvePuzzle(matriks):
@@ -149,7 +152,7 @@ def printSolution(finalNode):
     for i in range (len(path)):
         print("\nLangkah ke-" + str(i + 1), '\n')
         printPuzzle(path[i][1])
-        print("--------------------------------")
+        print("================================")
 
 def startSolve(matriks):
     print("\nPosisi awal: \n")
@@ -160,7 +163,7 @@ def startSolve(matriks):
     kurangPlusX = computeKurangPlusX(kurang, matriks)
     print("Nilai KURANG(i) + X = ", kurangPlusX)
 
-    print("\n--------------------------------")
+    print("\n================================")
 
     if (isReachable(kurangPlusX)):
         start = time.time()
