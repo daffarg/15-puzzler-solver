@@ -231,5 +231,7 @@ def startSolve(matriks):
         printSolution(finalNode, matriks)
         print("\nWaktu eksekusi = ", time.time() - start, "s")
         print("Jumlah simpul yang dibangkitkan = ", nodeBangkit, '\n')
+        return finalNode
     else:
         print("\nBerdasarkan hasil sigma KURANG(i) + x, persoalan tidak dapat diselesaikan (hasil ganjil)\n")
+        return None

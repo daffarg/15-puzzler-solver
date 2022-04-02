@@ -1,6 +1,8 @@
 import os
 import os.path
+import tkinter as tk
 from fifteenPuzzle import startSolve
+
 
 fileName = input("Masukkan nama file: ")
 
@@ -22,4 +24,26 @@ except:
     quit()
 
 matriks = [[int(elmt) for elmt in line.split()] for line in f] # ubah file ke dalam matriks
-startSolve(matriks) # cari solusi puzzle
+finalNode = startSolve(matriks) # cari solusi puzzle
+
+puzzleUI = tk.Tk(className = "15-Puzzle")
+
+# puzzleUI.minsize(300, 300)
+# puzzleUI.maxsize(300, 300)
+
+num = 1
+tiles = []
+for i in range(4):
+    for j in range(4):
+        tile = tk.Label(puzzleUI, text = str(num), width = 4, height = 2, font=("Calibri", 30))
+        tiles.append(tile)
+        num += 1
+
+idx = 0
+for i in range(4):
+    for j in range(4):
+        tiles[idx].grid(row = i, column = j, padx = 0.5, pady = 0.5)
+        idx += 1
+
+puzzleUI.mainloop()
+
