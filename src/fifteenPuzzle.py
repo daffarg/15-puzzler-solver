@@ -1,5 +1,6 @@
 from queue import PriorityQueue
 import time
+import sys
 from copy import deepcopy
 
 def searchEmptyTile(matriks): 
@@ -121,6 +122,7 @@ def solvePuzzle(matriks):
     queue = PriorityQueue() # instantiasi priority queue
     queue.put((0, matriks, 0, None)) # tupel: (cost, matriks, level, parentNode)
     nodeBangkit = [] # inisialisasi array penampung simpul yg sudah dibangkitkan
+    print("\nSearching...\nPlease wait")
 
     while (not(queue.empty())):
         currentNode = queue.get() # dequeue (node yg memiliki cost minimum)
@@ -143,13 +145,18 @@ def solvePuzzle(matriks):
                 taksiran = computeTaksiran(mat)
                 cost = taksiran + levelNode + 1
                 queue.put((cost, mat, levelNode + 1, currentNode))
+
+        sys.stdout.write("\rJumlah simpul yang telah dibangkitkan sejauh ini: {0}".format(len(nodeBangkit)))
+        sys.stdout.flush()
+        #time.sleep(0.5)
+
     return currentNode, len(nodeBangkit)    
 
-def printSolution(finalNode):
+def printSolution(finalNode, matriks):
     path = []
     while True:
         path.insert(0, finalNode)
-        if (finalNode[3] == None):
+        if (finalNode[3][1] == matriks):
             break
         finalNode = finalNode[3]
 
@@ -175,8 +182,9 @@ def startSolve(matriks):
     if (isReachable(kurangPlusX)):
         start = time.time()
         finalNode, nodeBangkit = solvePuzzle(matriks)
-        printSolution(finalNode)
-        print("Waktu eksekusi = ", time.time() - start, "s")
-        print("Jumlah simpul yang dibangkitkan = ", nodeBangkit)
+        print('\n')
+        printSolution(finalNode, matriks)
+        print("\nWaktu eksekusi = ", time.time() - start, "s")
+        print("Jumlah simpul yang dibangkitkan = ", nodeBangkit, '\n')
     else:
         print("Berdasarkan hasil fungsi KURANG(i) + x, persoalan tidak dapat diselesaikan")
