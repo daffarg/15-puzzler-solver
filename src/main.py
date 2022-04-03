@@ -123,7 +123,7 @@ if (finalNode != None):
                             relief = "flat"
                             text = ''
                             bgColor = "#ffffff"
-                            bgColor = "#ffffff"
+                            fgColor = "#ffffff"
                         else:
                             relief = "raised"
                             bgColor = "#247881"
