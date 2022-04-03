@@ -1,29 +1,46 @@
 import os
 import os.path
+import random
 import tkinter as tk
+import numpy as np
 from matplotlib.pyplot import step
 from fifteenPuzzle import startSolve, getPath
 
-fileName = input("Masukkan nama file: ")
+print("Metode pembangkitan posisi awal puzzle:\n1. Random\n2. File teks")
+choice = input("Pilih metode pembangkitan posisi awal puzzle (1 atau 2): ")
+matriks = []
+if (choice == '1'): # random
+    sequence = []
+    for i in range(1, 17): # array berisi bilangan 1-16
+        sequence.append(i)
 
-try:
-    if (os.path.basename(os.path.normpath(os.getcwd())) == 'src'):
-            os.chdir("..")
-    currentDir = os.getcwd() # direktori tempat menjalankan program
+    random.shuffle(sequence) # shuffle array untuk mendapatkan urutan yg random
+    arr = np.reshape(sequence, (4,4)) # ubah array ke dalam matriks
+    matriks = arr.tolist()
+elif (choice == '2'): # file teks
+    fileName = input("Masukkan nama file: ")
+    try:
+        if (os.path.basename(os.path.normpath(os.getcwd())) == 'src'):
+                os.chdir("..")
+        currentDir = os.getcwd() # direktori tempat menjalankan program
 
-    # mendapatkan semua path yang terdapat pada direktori repository (parent directory dari src)
-    arrayOfPath = [os.path.join(currentDir, arrayOfPath) for arrayOfPath in os.listdir(currentDir) if os.path.isdir(os.path.join(currentDir, arrayOfPath))]
-    
-    # pengecekan apakah terdapat file tsb pada folder test
-    for item in arrayOfPath:
-        if os.path.exists(item + '\\' + fileName) and os.path.basename(os.path.normpath(item)) == 'test':
-            file = item + '\\' + fileName
-    f = open(file, 'r')
-except: # file tidak ditemukan
-    print("File tidak ditemukan pada folder test")
+        # mendapatkan semua path yang terdapat pada direktori repository (parent directory dari src)
+        arrayOfPath = [os.path.join(currentDir, arrayOfPath) for arrayOfPath in os.listdir(currentDir) if os.path.isdir(os.path.join(currentDir, arrayOfPath))]
+        
+        # pengecekan apakah terdapat file tsb pada folder test
+        for item in arrayOfPath:
+            if os.path.exists(item + '\\' + fileName) and os.path.basename(os.path.normpath(item)) == 'test':
+                file = item + '\\' + fileName
+        f = open(file, 'r')
+    except: # file tidak ditemukan
+        print("File tidak ditemukan pada folder test!")
+        quit()
+
+    matriks = [[int(elmt) for elmt in line.split()] for line in f] # ubah file ke dalam matriks
+else:
+    print("Silakan pilih 1 atau 2!")
     quit()
 
-matriks = [[int(elmt) for elmt in line.split()] for line in f] # ubah file ke dalam matriks
 finalNode = startSolve(matriks) # cari solusi puzzle
 
 # jika puzzle bisa dipecahkan, tampilkan UI
