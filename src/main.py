@@ -1,7 +1,10 @@
 import os
 import os.path
 import tkinter as tk
-from fifteenPuzzle import startSolve
+from turtle import update
+from time import sleep
+from matplotlib.pyplot import step
+from fifteenPuzzle import startSolve, getPath
 
 
 fileName = input("Masukkan nama file: ")
@@ -26,24 +29,74 @@ except:
 matriks = [[int(elmt) for elmt in line.split()] for line in f] # ubah file ke dalam matriks
 finalNode = startSolve(matriks) # cari solusi puzzle
 
-puzzleUI = tk.Tk(className = "15-Puzzle")
+if (finalNode != None):
+    puzzleUI = tk.Tk(className = "15-Puzzle")
 
-# puzzleUI.minsize(300, 300)
-# puzzleUI.maxsize(300, 300)
+    puzzleUI.resizable(False, False)
 
-num = 1
-tiles = []
-for i in range(4):
-    for j in range(4):
-        tile = tk.Label(puzzleUI, text = str(num), width = 4, height = 2, font=("Calibri", 30))
-        tiles.append(tile)
-        num += 1
+    flag = False
 
-idx = 0
-for i in range(4):
-    for j in range(4):
-        tiles[idx].grid(row = i, column = j, padx = 0.5, pady = 0.5)
-        idx += 1
+    num = 1
+    tiles = []
 
-puzzleUI.mainloop()
+    for i in range(4):
+        for j in range(4):
+            if (matriks[i][j] == 16):
+                text = ''
+            else:   
+                text = str(matriks[i][j])
+            tile = tk.Label(puzzleUI, text = text, width = 4, height = 2, font=("Calibri", 30))
+            tiles.append(tile)
+            num += 1
 
+    def resetPuzzle():
+        idx = 0
+        for i in range(4):
+            for j in range(4):
+                if (matriks[i][j] == 16):
+                    text = ''
+                else:
+                    text = str(matriks[i][j])
+                tiles[idx].config(text = text)
+                idx += 1
+
+    idx = 0
+    for i in range(4):
+        for j in range(4):
+            tiles[idx].grid(row = i, column = j, padx = 0.5, pady = 0.5)
+            idx += 1
+
+    path = getPath(finalNode, matriks)
+    step = -1
+
+    def startPuzzle():
+        global step
+        if step > -1:
+            step = -1
+        updatePuzzle()
+        
+    def updatePuzzle():
+        global step
+        startButton["state"] = "disabled"
+        if (step < len(path)):
+            if step == -1:
+                resetPuzzle()
+            else :
+                idx = 0
+                for i in range(4):
+                    for j in range(4):
+                        if (path[step][1][i][j] == 16):
+                            text = ''
+                        else:
+                            text = str(path[step][1][i][j])
+                        tiles[idx].config(text = text)
+                        idx += 1
+            step += 1  
+            puzzleUI.after(1000, updatePuzzle)  
+        else:
+            startButton["state"] = "normal"    
+
+    startButton = tk.Button(puzzleUI, text = "Mulai", command = startPuzzle)
+    startButton.grid(row = 4, column = 1, columnspan = 4, padx = 1, pady = 1)
+
+    puzzleUI.mainloop()

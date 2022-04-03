@@ -193,17 +193,23 @@ def printSolution(finalNode, matriks):
     '''
         Melakukan print ke layar langkah-langkah yang dilakukan untuk memecahkan puzzle
     '''
+
+    path = getPath(finalNode, matriks)
+
+    for i in range (len(path)):
+        print("\nLangkah ke-" + str(i + 1), ': ' + path[i][4] + '\n')
+        printPuzzle(path[i][1])
+        print("================================")
+
+def getPath(finalNode, matriks):
     path = []
     while True:
         path.insert(0, finalNode)
         if (finalNode[3][1] == matriks):
             break
         finalNode = finalNode[3]
-
-    for i in range (len(path)):
-        print("\nLangkah ke-" + str(i + 1), ': ' + path[i][4] + '\n')
-        printPuzzle(path[i][1])
-        print("================================")
+    
+    return path
 
 def startSolve(matriks):
     '''
