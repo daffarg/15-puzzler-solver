@@ -18,7 +18,7 @@ if (choice == '1'): # random
     arr = np.reshape(sequence, (4,4)) # ubah array ke dalam matriks
     matriks = arr.tolist()
 elif (choice == '2'): # file teks
-    fileName = input("Masukkan nama file: ")
+    fileName = input("Masukkan nama file yang ada pada folder test: ")
     try:
         if (os.path.basename(os.path.normpath(os.getcwd())) == 'src'):
                 os.chdir("..")
