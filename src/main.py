@@ -3,7 +3,6 @@ import os.path
 import random
 import tkinter as tk
 import numpy as np
-from matplotlib.pyplot import step
 from fifteenPuzzle import startSolve, getPath
 
 print("Metode pembangkitan posisi awal puzzle:\n1. Random\n2. File teks")
@@ -25,7 +24,8 @@ elif (choice == '2'): # file teks
         currentDir = os.getcwd() # direktori tempat menjalankan program
 
         # mendapatkan semua path yang terdapat pada direktori repository (parent directory dari src)
-        arrayOfPath = [os.path.join(currentDir, arrayOfPath) for arrayOfPath in os.listdir(currentDir) if os.path.isdir(os.path.join(currentDir, arrayOfPath))]
+        arrayOfPath = [os.path.join(currentDir, arrayOfPath) for arrayOfPath in os.listdir(currentDir) 
+            if os.path.isdir(os.path.join(currentDir, arrayOfPath))]
         
         # pengecekan apakah terdapat file tsb pada folder test
         for item in arrayOfPath:
@@ -63,7 +63,8 @@ if (finalNode != None):
                 bgColor = "#247881"
                 fgColor = "#17252a"
                 text = str(matriks[i][j])
-            tile = tk.Label(puzzleUI, text = text, width = 4, height = 2, font=("Segoe UI Semibold", 30), bg= bgColor, fg = fgColor, relief = relief)
+            tile = tk.Label(puzzleUI, text = text, width = 4, height = 2, font=("Segoe UI Semibold", 30), bg= bgColor, 
+                fg = fgColor, relief = relief)
             tiles.append(tile)
 
     # posisikan tile dengan grid

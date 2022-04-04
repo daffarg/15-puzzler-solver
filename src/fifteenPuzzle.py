@@ -224,7 +224,7 @@ def startSolve(matriks):
 
     totalKurang, arrayKurang = computeKurang(matriks)
     for i in range(len(arrayKurang)):
-        print("Nilai KURANG(i) untuk tile ke-" + str(i+1), " = ", arrayKurang[i])
+        print("Nilai KURANG(" + str(i+1) + ") = ", arrayKurang[i])
     kurangPlusX = computeKurangPlusX(totalKurang, matriks)
     print("\nNilai sigma KURANG(i) + X = ", kurangPlusX)
 
