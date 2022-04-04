@@ -9,7 +9,13 @@ Tugas ini merupakan program yang menyelesaikan persoalan 15-Puzzle dengan Algori
 ## Struktur Folder
 
 - `src` : source code program
-- `test` : file teks masukan matriks
+- `test` : file teks yang berisi matriks 4x4 merepresentasikan keadaan awal puzzle. Contohnya seperti di bawah ini:
+```
+1 2 3 4
+5 6 16 8
+9 10 7 11
+13 14 15 12
+```
 - `doc` : laporan
 
 ## Tools
@@ -20,7 +26,7 @@ Tugas ini merupakan program yang menyelesaikan persoalan 15-Puzzle dengan Algori
 ## Instalasi Tools
 
 1. Install Python yang dapat diunduh di https://www.python.org/downloads/
-2. Tkinter otomatis terinstall jika menginstall Python melalui link pada langkah pertama.
+2. Tkinter otomatis terinstall jika menginstall Python melalui tautan pada langkah pertama.
    Verifikasi apakah tkinter sudah terinstall dengan cara menjalankan perintah `python -m tkinter` pada terminal.
 
 ## How to Run
@@ -30,4 +36,4 @@ Tugas ini merupakan program yang menyelesaikan persoalan 15-Puzzle dengan Algori
 3. Pilih opsi metode pembangkitan posisi awal puzzle
 4. Masukkan nama file beserta ekstensinya (.txt) yang ada pada folder `test` jika memilih metode file teks
 5. Langkah-langkah penyelesaian akan muncul pada terminal dan window GUI akan muncul jika puzzle bisa diselesailan
-6. Klik tombol Mulai pada GUI untuk melihat visualisasi pergerakan puzzl
+6. Klik tombol Mulai pada GUI untuk melihat visualisasi pergerakan puzzle
